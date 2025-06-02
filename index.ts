@@ -38,6 +38,14 @@ server.post("/products", async (req: Request, res: Response) => {
   }
 });
 
+server.get("/products", async (req: Request, res: Response) => {
+  const allProducts = await productsModel.find({});
+
+  res.status(200).json({
+    data: allProducts,
+  });
+});
+
 server.listen(8000, () => {
   console.log("Server is started");
 });
