@@ -17,42 +17,14 @@ server.post("/products", async (req: Request, res: Response) => {
   // desctructuring object...
   const { product_name, product_desc, price, image_url } = req.body;
 
-  if (!product_name) {
-    res.status(400).json({
-      message: "Product name is required",
-    });
-    return;
-  }
-
-  if (!product_desc) {
-    res.status(400).json({
-      message: "Product desc is required",
-    });
-    return;
-  }
-
-  if (!price) {
-    res.status(400).json({
-      message: "Price  is required",
-    });
-    return;
-  }
-
-  if (price < 10) {
-    res.status(400).json({
-      message: "Price must be more than 10",
-    });
-    return;
-  }
-
-  if (!image_url) {
-    res.status(400).json({
-      message: "image_url  is required",
-    });
-    return;
-  }
-
   try {
+    if (!product_name) throw "Product name is required";
+    if (!product_desc) throw "Product desc is required!";
+    if (!price) throw "price is required!";
+    if (!image_url) throw "image_url is required!";
+    if (price < 10) throw "price must be more than 10";
+    if (price > 1000000) throw "Excessive price";
+
     await productsModel.create(req.body);
 
     res.status(200).json({
@@ -61,8 +33,7 @@ server.post("/products", async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(400).json({
-      message: "Failed to enter data!",
-      errorData: JSON.stringify(error),
+      message: error,
     });
   }
 });
